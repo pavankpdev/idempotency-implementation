@@ -4,13 +4,13 @@
       "id": "432051dc-5b87-4cc9-bd5e-da8bab7a1c4a",
       "full_name": "Amii",
       "email": "amathevon0@blog.com",
-      "balance": 115.83000000000001
+      "balance": 145.83
     },
     {
       "id": "6f05564b-503f-42b2-93dd-614a285309a8",
       "full_name": "Daune",
       "email": "dchalk1@vimeo.com",
-      "balance": 141.76999999999998
+      "balance": 111.77
     },
     {
       "id": "213b3030-b443-40d3-9922-b518269e962c",
@@ -63,36 +63,22 @@
   ],
   "transfers": [
     {
-      "id": "ee4efcc8-a495-4ecc-9464-ca1c903dc129",
+      "id": "dd89a04a-62cd-450e-8215-9dc241db6414",
       "senderEmail": "amathevon0@blog.com",
       "recipientEmail": "dchalk1@vimeo.com",
       "amount": 10,
       "status": "COMPLETED",
-      "createdAt": "2025-09-27T11:17:58.923Z"
-    },
+      "createdAt": "2025-09-27T12:19:53.340Z",
+      "finalizedAt": "2025-09-27T12:20:35.271Z"
+    }
+  ],
+  "snapshots": [
     {
-      "id": "8005bd60-cf9e-4a58-9d5c-1faf88c2c91b",
-      "senderEmail": "amathevon0@blog.com",
-      "recipientEmail": "dchalk1@vimeo.com",
-      "amount": 10,
-      "status": "COMPLETED",
-      "createdAt": "2025-09-27T11:18:19.631Z"
-    },
-    {
-      "id": "f3e5bee7-b91c-42d6-9916-638e6caa1d51",
-      "senderEmail": "amathevon0@blog.com",
-      "recipientEmail": "dchalk1@vimeo.com",
-      "amount": 10,
-      "status": "COMPLETED",
-      "createdAt": "2025-09-27T11:18:21.832Z"
-    },
-    {
-      "id": "da6ea9be-9ceb-4e9f-a3f2-e2d2cf2d2999",
-      "senderEmail": "amathevon0@blog.com",
-      "recipientEmail": "dchalk1@vimeo.com",
-      "amount": 10,
-      "status": "COMPLETED",
-      "createdAt": "2025-09-27T11:18:23.748Z"
+      "id": "cea0ec42-7e9e-4869-863c-5c5d66aedfbf",
+      "payloadHash": "78e6e6b51eb5a7cbbbff5d6d23755325a39bad1ffe49b672fe840f3e83ddcbdb",
+      "transferId": "dd89a04a-62cd-450e-8215-9dc241db6414",
+      "state": "COMPLETED",
+      "attemptCount": 3
     }
   ]
 }

@@ -15,6 +15,7 @@ export interface Transfer {
     amount: number; 
     createdAt: Date;
     status: "PENDING" | "COMPLETED";
+    finalizedAt?: Date;
 }
 
 export interface Balance {
@@ -22,4 +23,12 @@ export interface Balance {
     full_name: string;
     email: string;
     balance: number;
+}
+
+export interface Snapshots {
+    id: string;
+    payloadHash: string;
+    transferId: string;
+    state: "PENDING" | "COMPLETED";
+    attemptCount: number;
 }

@@ -9,6 +9,14 @@ export const validateSendUnsafePaymentRequest = (body: PaymentRequest) => {
     if (!body.amount) {
         throw new Error("Amount is missing");
     }
+    
+    if(body.amount < 0) {   
+        throw new Error("Amount must be positive");
+    }
+
+    if(body.amount === 0) {   
+        throw new Error("Amount must be greater than 0");
+    }
 
     if (!body.senderEmail) {
         throw new Error("Sender Email is missing");
@@ -26,6 +34,14 @@ export const validateSendSafePaymentRequest = (body: SafePaymentRequest) => {
 
     if (!body.amount) {
         throw new Error("Amount is missing");
+    }
+      
+    if(body.amount < 0) {   
+        throw new Error("Amount must be positive");
+    }
+
+    if(body.amount === 0) {   
+        throw new Error("Amount must be greater than 0");
     }
 
     if (!body.senderEmail) {
