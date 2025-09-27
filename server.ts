@@ -1,6 +1,9 @@
 import dotenv from "dotenv";
 import express, {
-    type Request
+    type Request,
+    type Response,
+    type NextFunction,
+    type ErrorRequestHandler
 } from "express";
 import cors from "cors";
 import {
@@ -28,14 +31,32 @@ import {
 
 dotenv.config();
 
+console.log('🚀 Starting server...');
+console.log('📊 Environment:', {
+    NODE_ENV: process.env.NODE_ENV || 'development',
+    PORT: process.env.PORT || 3000
+});
+
 const app = express();
 const lock = new AsyncLock();
 
 app.use(cors());
 app.use(express.json());
 
+// Serve static files from client directory
+app.use(express.static('client'));
+console.log('📁 Serving static files from ./client directory');
+
+// Add request logging middleware
+app.use((req, res, next) => {
+    console.log(`📝 ${new Date().toISOString()} - ${req.method} ${req.path}`);
+    next();
+});
+
 app.post("/unsafe-pay", async (req: Request < {}, any, PaymentRequest > , res) => {
-    validateSendUnsafePaymentRequest(req.body);
+    try {
+        console.log('⚠️  POST /unsafe-pay - Processing unsafe payment');
+        validateSendUnsafePaymentRequest(req.body);
 
     const {
         senderEmail,
@@ -118,10 +139,20 @@ app.post("/unsafe-pay", async (req: Request < {}, any, PaymentRequest > , res) =
         status: "processing"
     });
     return
+    } catch (error) {
+        console.error('❌ POST /unsafe-pay error:', error);
+        if (error instanceof Error) {
+            res.status(400).json({ error: error.message });
+        } else {
+            res.status(500).json({ error: 'Internal server error' });
+        }
+    }
 });
 
 app.post("/safe-pay", async (req: Request < {}, any, SafePaymentRequest > , res) => {
-    validateSendSafePaymentRequest(req.body);
+    try {
+        console.log('🛡️  POST /safe-pay - Processing safe payment');
+        validateSendSafePaymentRequest(req.body);
 
     await lock.acquire(req.body.idempotencyKey, async () => {
         const {
@@ -281,8 +312,42 @@ app.post("/safe-pay", async (req: Request < {}, any, SafePaymentRequest > , res)
         });
         return
     })
+    } catch (error) {
+        console.error('❌ POST /safe-pay error:', error);
+        if (error instanceof Error) {
+            res.status(400).json({ error: error.message });
+        } else {
+            res.status(500).json({ error: 'Internal server error' });
+        }
+    }
 });
 
-app.listen(process.env.PORT || 3000, () => {
-    console.log(`Server is running on port ${process.env.PORT || 3000}`);
+app.get("/balance", async (req, res) => {
+    try {
+        console.log('📊 GET /balance - Fetching user balances');
+        const { balances } = db.data;
+        console.log(`📊 Found ${balances.length} users in database`);
+        res.json(balances);
+    } catch (error) {
+        console.error('❌ GET /balance error:', error);
+        res.status(500).json({ error: 'Failed to fetch balances' });
+    }
+});
+
+// Add error handling middleware
+const errorHandler: ErrorRequestHandler = (error, req, res, next) => {
+    console.error('💥 Unhandled error:', error);
+    res.status(500).json({ error: 'Internal server error' });
+};
+app.use(errorHandler);
+
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT, () => {
+    console.log(`🎉 Server is running on port ${PORT}`);
+    console.log(`🌐 Frontend should connect to: http://localhost:${PORT}`);
+    console.log('📋 Available endpoints:');
+    console.log('  GET  /balance     - Fetch user balances');
+    console.log('  POST /unsafe-pay  - Unsafe payment (3x retry)');
+    console.log('  POST /safe-pay    - Safe payment (idempotent)');
 });
